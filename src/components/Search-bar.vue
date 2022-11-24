@@ -5,7 +5,7 @@
       required
       name="input"
       id="input-query"
-      placeholder="text"
+      :placeholder="text"
     />
   </div>
 </template>
