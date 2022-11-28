@@ -1,17 +1,23 @@
 <template>
-  <div class="search-box">
-    <button @click="showquery" class="btn-search">
+  <div
+    class="search-box"
+    :class="this.images.length > 1 ? 'default-position' : ''"
+  >
+    <button class="btn-search">
       <i class="fas fa-search"></i>
     </button>
     <input
       @keypress.enter="getImages"
+      @blur="this.error = false"
       v-model="query"
       type="text"
       class="input-search"
-      placeholder="Type to Search..."
+      placeholder="Press Enter to Search..."
     />
   </div>
-  <image-grid> </image-grid>
+  <div class="error-msg" v-if="error">Please type something</div>
+
+  <image-grid :images="images" v-if="showGrid"> </image-grid>
 </template>
 
 <script>
@@ -24,23 +30,27 @@ export default {
     return {
       query: '',
       images: [],
+      error: false,
+      showGrid: false,
     };
   },
-  props: {
-    text: String,
-  },
-  methods: {
-    showquery() {
-      console.log(this.query);
-    },
 
+  methods: {
     async getImages() {
+      if (this.query.length < 1) {
+        this.error = true;
+      } else this.error = false;
       const res = await axios.get(
         `https://api.unsplash.com/search/photos?query=${this.query}&client_id=${process.env.VUE_APP_PROJECT_ACCESS_KEY}`
       );
       this.images = res.data.results;
+      this.query = '';
       console.log(this.images);
+      this.showGrid = true;
     },
+  },
+  components: {
+    ImageGrid,
   },
 };
 </script>
@@ -52,17 +62,15 @@ export default {
 body {
   margin: 0px;
   padding: 0px;
-  width: 100vw;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #130f40;
 }
 .search-box {
   width: fit-content;
   height: fit-content;
   position: relative;
+  top: 400px;
 }
 .input-search {
   height: 50px;
@@ -110,5 +118,20 @@ body {
   border-radius: 0px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
   transition: all 500ms cubic-bezier(0, 0.11, 0.35, 2);
+}
+
+.error-msg {
+  position: relative;
+  font-size: 20px;
+  font-weight: lighter;
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+  top: 400px;
+}
+.default-position {
+  position: relative;
+  top: 10px;
+  margin: auto;
 }
 </style>

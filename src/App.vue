@@ -1,5 +1,5 @@
 <template>
-  <Searchbar text="Search an image"></Searchbar>
+  <Searchbar></Searchbar>
 </template>
 
 <script>
@@ -25,8 +25,6 @@ export default {
 html {
   margin: 0px;
   padding: 0px;
-  width: 100vw;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
