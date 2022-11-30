@@ -21,10 +21,7 @@ export default {
   margin: 0;
   padding: 0;
 }
-
-html {
-  margin: 0px;
-  padding: 0px;
+body {
   display: flex;
   justify-content: center;
   align-items: center;

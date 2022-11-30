@@ -3,20 +3,26 @@
     class="search-box"
     :class="this.images.length > 1 ? 'default-position' : ''"
   >
-    <button class="btn-search">
+    <button
+      @click="this.count > 0 ? getImages() : this.count++"
+      class="btn-search"
+    >
       <i class="fas fa-search"></i>
     </button>
     <input
       @keypress.enter="getImages"
-      @blur="this.error = false"
+      @blur="
+        this.invalidQuery = false;
+        this.noResults = false;
+      "
       v-model="query"
       type="text"
       class="input-search"
       placeholder="Press Enter to Search..."
     />
   </div>
-  <div class="error-msg" v-if="error">Please type something</div>
 
+  <div class="error-msg" v-if="noResults">No results, please try again</div>
   <image-grid :images="images" v-if="showGrid"> </image-grid>
 </template>
 
@@ -30,23 +36,23 @@ export default {
     return {
       query: '',
       images: [],
-      error: false,
       showGrid: false,
+      count: 0,
+      noResults: false,
     };
   },
 
   methods: {
     async getImages() {
-      if (this.query.length < 1) {
-        this.error = true;
-      } else this.error = false;
       const res = await axios.get(
         `https://api.unsplash.com/search/photos?query=${this.query}&client_id=${process.env.VUE_APP_PROJECT_ACCESS_KEY}`
       );
-      this.images = res.data.results;
+      if (res.data.results.length < 1) {
+        this.noResults = true;
+      } else this.images = res.data.results;
       this.query = '';
       console.log(this.images);
-      this.showGrid = true;
+      if (this.images.length > 1) this.showGrid = true;
     },
   },
   components: {
@@ -70,7 +76,7 @@ body {
   width: fit-content;
   height: fit-content;
   position: relative;
-  top: 400px;
+  top: 350px;
 }
 .input-search {
   height: 50px;
@@ -126,7 +132,6 @@ body {
   font-weight: lighter;
   color: red;
   text-align: center;
-  margin-top: 10px;
   top: 400px;
 }
 .default-position {

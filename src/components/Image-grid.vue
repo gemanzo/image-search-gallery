@@ -1,11 +1,16 @@
 <template>
   <div class="grid">
-    <ImageCard
-      v-for="image in images"
-      :src="image.urls.regular"
-      :alt="image.alt_description"
-      :key="image.id"
-    ></ImageCard>
+    <div class="container" v-for="image in images">
+      <ImageCard
+        :image="image"
+        :src="image.urls.regular"
+        :alt="image.alt_description"
+        :key="image.id"
+      ></ImageCard>
+      <p v-if="isSelected" class="author">
+        {{ image.user.first_name }} {{ image.user.last_name }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -25,11 +30,23 @@ export default {
 
 <style scoped>
 .grid {
-  margin-top: 50px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1rem;
+  width: 80vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 0.5rem;
+  margin: auto;
+  margin-top: 5rem;
   padding: 2rem;
+}
+
+.author {
+  color: white;
+  position: relative;
+  top: -15px;
+  left: 0px;
+  font-size: x-small;
+  padding-bottom: 5px;
+  margin-left: 5px;
 }
 </style>
