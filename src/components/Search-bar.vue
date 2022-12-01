@@ -44,8 +44,9 @@ export default {
 
   methods: {
     async getImages() {
+      const key = process.env.VUE_APP_PROJECT_ACCESS_KEY;
       const res = await axios.get(
-        `https://api.unsplash.com/search/photos?query=${this.query}&client_id=${process.env.VUE_APP_PROJECT_ACCESS_KEY}`
+        `https://api.unsplash.com/search/photos?query=${this.query}&client_id=${key}`
       );
       if (res.data.results.length < 1) {
         this.noResults = true;

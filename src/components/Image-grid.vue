@@ -7,9 +7,6 @@
         :alt="image.alt_description"
         :key="image.id"
       ></ImageCard>
-      <p v-if="isSelected" class="author">
-        {{ image.user.first_name }} {{ image.user.last_name }}
-      </p>
     </div>
   </div>
 </template>
